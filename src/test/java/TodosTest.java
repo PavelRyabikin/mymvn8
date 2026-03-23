@@ -30,7 +30,7 @@ public class TodosTest {
     }
 
     @Test
-    public void shouldSearchTasks() {
+    public void shouldFindOneTask() {
         Todos todos = new Todos();
 
         SimpleTask simpleTask = new SimpleTask(1, "Позвонить родителям");
@@ -43,6 +43,42 @@ public class TodosTest {
 
         Task[] expected = {epic};
         Task[] actual = todos.search("Хлеб");
+
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldFindSeveralTasks() {
+        Todos todos = new Todos();
+
+        SimpleTask simpleTask = new SimpleTask(1, "Хлеб");
+        Epic epic = new Epic(2, new String[]{"Хлеб", "Молоко"});
+        Meeting meeting = new Meeting(3, "Хлеб", "Проект X", "Завтра");
+
+        todos.add(simpleTask);
+        todos.add(epic);
+        todos.add(meeting);
+
+        Task[] expected = {simpleTask, epic, meeting};
+        Task[] actual = todos.search("Хлеб");
+
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldFindZeroTasks() {
+        Todos todos = new Todos();
+
+        SimpleTask simpleTask = new SimpleTask(1, "Позвонить");
+        Epic epic = new Epic(2, new String[]{"Молоко", "Яйца"});
+        Meeting meeting = new Meeting(3, "Релиз", "Проект X", "Завтра");
+
+        todos.add(simpleTask);
+        todos.add(epic);
+        todos.add(meeting);
+
+        Task[] expected = {};
+        Task[] actual = todos.search("Автомобиль");
 
         Assertions.assertArrayEquals(expected, actual);
     }
